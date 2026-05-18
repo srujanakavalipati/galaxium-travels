@@ -54,6 +54,10 @@ galaxium-travels/
 ### Key Documentation
 
 - **[AGENTS.md](AGENTS.md)** - Critical non-obvious patterns, testing specifics, and architectural constraints
+- **[plans/](plans/)** - Feature planning and implementation documentation
+  - [Seat Classes Architecture](plans/seat-classes-architecture.md) - Complete architectural overview
+  - [Implementation Plan](plans/seat-classes-implementation-plan.md) - Detailed implementation guide
+  - [Implementation Checklist](plans/implementation-checklist.md) - Task completion tracking
 - **[docs/](docs/)** - All documentation (deployment guides, implementation ideas, etc.)
 - **[scripts/](scripts/)** - All operational scripts organized by deployment target
 
@@ -124,6 +128,7 @@ Once started, access:
 
 ### Additional Documentation
 - **[AGENTS.md](AGENTS.md)** - Critical patterns for AI agents working with this codebase
+- **[plans/](plans/)** - Feature planning and architecture documentation
 - **[docs/](docs/)** - All other documentation (implementation ideas, migration plans, etc.)
 - **[scripts/](scripts/)** - Operational scripts organized by deployment target
 

@@ -204,6 +204,70 @@ class TestFlightService:
         result = flight.list_flights(db_session, route_category="inner_planets")
         assert len(result) == 1
         assert result[0].destination == "Mars"
+    def test_list_flights_filter_by_traveller_count(self, db_session):
+        """Test filtering flights by traveller count."""
+        db_session.add(Flight(
+            origin="Earth", destination="Mars",
+            departure_time="2099-01-01T09:00:00Z", arrival_time="2099-01-01T17:00:00Z",
+            base_price=1000, economy_seats_available=1, business_seats_available=1, galaxium_seats_available=0
+        ))
+        db_session.add(Flight(
+            origin="Earth", destination="Venus",
+            departure_time="2099-01-02T09:00:00Z", arrival_time="2099-01-02T17:00:00Z",
+            base_price=1000, economy_seats_available=5, business_seats_available=3, galaxium_seats_available=2
+        ))
+        db_session.commit()
+
+        # Test with 2 adults - should only show flights with at least 2 total seats
+        result = flight.list_flights(db_session, num_adults=2)
+        assert len(result) == 2  # Both flights have >= 2 seats
+        for f in result:
+            total_seats = f.economy_seats_available + f.business_seats_available + f.galaxium_seats_available
+            assert total_seats >= 2
+
+        # Test with 5 travellers - should only show Venus flight
+        result = flight.list_flights(db_session, num_adults=5)
+        assert len(result) == 1
+        assert result[0].destination == "Venus"
+
+    def test_list_flights_filter_by_mixed_travellers(self, db_session):
+        """Test filtering flights with mixed traveller types."""
+        db_session.add(Flight(
+            origin="Earth", destination="Mars",
+            departure_time="2099-01-01T09:00:00Z", arrival_time="2099-01-01T17:00:00Z",
+            base_price=1000, economy_seats_available=2, business_seats_available=1, galaxium_seats_available=0
+        ))
+        db_session.add(Flight(
+            origin="Earth", destination="Venus",
+            departure_time="2099-01-02T09:00:00Z", arrival_time="2099-01-02T17:00:00Z",
+            base_price=1000, economy_seats_available=5, business_seats_available=3, galaxium_seats_available=2
+        ))
+        db_session.commit()
+
+        # Test with 2 adults + 1 child + 1 infant = 4 total
+        result = flight.list_flights(db_session, num_adults=2, num_children=1, num_infants=1)
+        assert len(result) == 1
+        assert result[0].destination == "Venus"
+        total_seats = result[0].economy_seats_available + result[0].business_seats_available + result[0].galaxium_seats_available
+        assert total_seats >= 4
+
+    def test_list_flights_traveller_filter_with_zero(self, db_session):
+        """Test that zero or no travellers doesn't filter."""
+        db_session.add(Flight(
+            origin="Earth", destination="Mars",
+            departure_time="2099-01-01T09:00:00Z", arrival_time="2099-01-01T17:00:00Z",
+            base_price=1000, economy_seats_available=5, business_seats_available=3, galaxium_seats_available=1
+        ))
+        db_session.commit()
+
+        # Get all flights without filter
+        all_flights = flight.list_flights(db_session)
+        
+        # Get flights with 0 travellers - should return same as no filter
+        flights_with_zero = flight.list_flights(db_session, num_adults=0, num_children=0, num_infants=0)
+        
+        assert len(flights_with_zero) == len(all_flights)
+
 
     def test_list_flights_combined_filters(self, db_session):
         """Test combining multiple filters."""

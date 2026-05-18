@@ -66,6 +66,10 @@ export interface FlightFilters {
   min_seats_available?: number;
   // Phase 3: Popular Routes from feature branch
   route_category?: 'inner_planets' | 'outer_planets' | 'moons';
+  // Traveller filters
+  num_adults?: number;
+  num_children?: number;
+  num_infants?: number;
 }
 
 /**

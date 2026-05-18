@@ -27,6 +27,11 @@ class FlightQueryParams(BaseModel):
     # Sorting
     sort: Optional[Literal['price', 'departure_time', 'duration']] = None
     order: Optional[Literal['asc', 'desc']] = 'asc'
+    
+    # Traveller filters
+    num_adults: Optional[int] = None
+    num_children: Optional[int] = None
+    num_infants: Optional[int] = None
 
 
 class FlightOut(BaseModel):

@@ -243,6 +243,57 @@ export const FlightFilters = ({ filters, onFiltersChange, onReset }: FlightFilte
                 ))}
               </div>
             </div>
+
+            {/* Traveller Filter */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-star-white">Travellers</label>
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Adults"
+                    value={filters.num_adults || ''}
+                    onChange={(e) =>
+                      updateFilter('num_adults', e.target.value ? parseInt(e.target.value) : undefined)
+                    }
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-star-white text-sm focus:outline-none focus:ring-2 focus:ring-cosmic-purple"
+                  />
+                  <span className="text-xs text-star-white/50 mt-1 block">Adults (12+)</span>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Children"
+                    value={filters.num_children || ''}
+                    onChange={(e) =>
+                      updateFilter('num_children', e.target.value ? parseInt(e.target.value) : undefined)
+                    }
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-star-white text-sm focus:outline-none focus:ring-2 focus:ring-cosmic-purple"
+                  />
+                  <span className="text-xs text-star-white/50 mt-1 block">Children (2-11)</span>
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="Infants"
+                    value={filters.num_infants || ''}
+                    onChange={(e) =>
+                      updateFilter('num_infants', e.target.value ? parseInt(e.target.value) : undefined)
+                    }
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-star-white text-sm focus:outline-none focus:ring-2 focus:ring-cosmic-purple"
+                  />
+                  <span className="text-xs text-star-white/50 mt-1 block">Infants (0-1)</span>
+                </div>
+              </div>
+              {(filters.num_adults || filters.num_children || filters.num_infants) && (
+                <p className="text-xs text-star-white/70 mt-1">
+                  Total: {(filters.num_adults || 0) + (filters.num_children || 0) + (filters.num_infants || 0)} traveller(s)
+                </p>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

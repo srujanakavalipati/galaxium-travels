@@ -38,7 +38,11 @@ def list_flights(
     max_duration: Optional[int] = None,
     min_seats_available: Optional[int] = None,
     # Phase 3: Popular Routes from feature branch
-    route_category: Optional[str] = None
+    route_category: Optional[str] = None,
+    # Traveller filters
+    num_adults: Optional[int] = None,
+    num_children: Optional[int] = None,
+    num_infants: Optional[int] = None
 ) -> list[FlightOut] | ErrorResponse:
     """List flights with optional filtering and sorting.
     
@@ -65,6 +69,9 @@ def list_flights(
         max_duration: Maximum flight duration in hours
         min_seats_available: Minimum total seats available
         route_category: Route category (inner_planets, outer_planets, moons)
+        num_adults: Number of adult travellers (age 12+)
+        num_children: Number of child travellers (age 2-11)
+        num_infants: Number of infant travellers (age 0-1)
     
     Returns:
         List of FlightOut objects with computed prices for all seat classes
@@ -166,6 +173,17 @@ def list_flights(
             Flight.galaxium_seats_available
         )
         query = query.filter(total_seats >= min_seats_available)
+    
+    # Traveller count filter
+    if num_adults is not None or num_children is not None or num_infants is not None:
+        total_travellers = (num_adults or 0) + (num_children or 0) + (num_infants or 0)
+        if total_travellers > 0:
+            total_seats = (
+                Flight.economy_seats_available +
+                Flight.business_seats_available +
+                Flight.galaxium_seats_available
+            )
+            query = query.filter(total_seats >= total_travellers)
     
     # Phase 3: Route category filter
     if route_category and route_category in ROUTE_CATEGORIES:

@@ -64,6 +64,9 @@ export interface FlightFilters {
   minPrice?: number;
   maxPrice?: number;
   searchTerm?: string;
+  num_adults?: number;
+  num_children?: number;
+  num_infants?: number;
 }
 
 // User context type

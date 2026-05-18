@@ -176,6 +176,10 @@ def get_flights(
     min_seats_available: Optional[int] = None,
     # Phase 3: Popular Routes from feature branch
     route_category: Optional[str] = None,
+    # Traveller filters
+    num_adults: Optional[int] = None,
+    num_children: Optional[int] = None,
+    num_infants: Optional[int] = None,
     db: Session = Depends(get_db)
 ):
     """List all available flights with optional filtering and sorting.
@@ -208,6 +212,11 @@ def get_flights(
     
     **Phase 3 - Popular Routes:**
     - route_category: Route category (inner_planets, outer_planets, moons)
+    
+    **Traveller Filters:**
+    - num_adults: Number of adult travellers (age 12+)
+    - num_children: Number of child travellers (age 2-11)
+    - num_infants: Number of infant travellers (age 0-1)
     """
     return flight.list_flights(
         db=db,
@@ -229,7 +238,10 @@ def get_flights(
         min_duration=min_duration,
         max_duration=max_duration,
         min_seats_available=min_seats_available,
-        route_category=route_category
+        route_category=route_category,
+        num_adults=num_adults,
+        num_children=num_children,
+        num_infants=num_infants
     )
 
 
